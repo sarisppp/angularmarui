@@ -1,0 +1,32 @@
+<div class="main-content">
+  <div class="container">
+    <div class="card">
+      
+
+      <form #loginForm=ngForm (ngSubmit)="onSubmit()">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">เข้าสู่ระบบ</h4>
+          <p class="card-category">Login</p>
+        </div>
+        <div class="card-body">
+
+          <div class="alert" [hidden]="!error" [ngStyle]="{'color':'red'}">{{error}}</div>
+          <div class="form-floating mb-3 mt-5">
+            <input type="text" class="form-control" id="floatingInput" placeholder="xxxxxxx"
+              [(ngModel)]="form.email" required>
+            <label for="floatingInput">User ID</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="xxxxxxx"
+              [(ngModel)]="form.password" required>
+            <label for="floatingPassword">Password</label>
+          </div>
+          <button type="submit" class="btn btn-danger btn-round" [disabled]="!loginForm.valid">Login</button>
+        </div>
+      </form>
+
+
+
+    </div>
+  </div>
+</div>

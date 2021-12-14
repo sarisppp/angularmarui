@@ -1,0 +1,39 @@
+<div class="main-content">
+    <div class="container-fluid">
+
+        <div class="d-flex flex-row-reverse">
+             <div class="d-flex align-items-center">
+                <i class="material-icons">search</i>
+             </div>
+             <div class="p-1 " style="width: 300px;"> 
+                <input type="text" class="form-control" placeholder="Seach by course... " [(ngModel)]="searchTerm" >
+                 </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let item of filteredItems ; index as id;" class="col-lg-3 col-md-6 col-sm-6" >
+                <div class="card card-stats" (click)="onSelect(item._id)">  <img src="../../assets/img/course1.jpg" class="img-fluid pb-3 ">
+                    <div class="card-header card-header-danger card-header-icon" style="height: 100px;">
+                        <div class="card-icon">
+                            <i class="material-icons">store</i>
+                        </div>
+                        <h5 class="card-title">{{item.course | slice:0:50 }}</h5>
+                        <p class="card-category">{{item.speaker}}</p>
+                       
+                      
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <i class="material-icons text-danger">date_range</i> {{item.date | date:'dd MMM y' }}
+                        </div>
+                        <div class="end">
+                            <h6 class="text-gray">{{item.category}}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            
+            
+        </div>
+       
+</div>

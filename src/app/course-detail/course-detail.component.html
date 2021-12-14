@@ -1,0 +1,173 @@
+<div class="main-content">
+  <div class="container-fluid">
+
+    <div class="row" *ngIf=!loggedIn>
+      <div class="card col-md-12 bg-danger mb-3">
+        <!-- <div class="card-header card-header-danger"> -->
+        <h3 class="card-title ">{{items[id].course}}</h3>
+        <h4 class="card-category">&nbsp;หลักสูตรอบรม</h4>
+        <!-- </div> -->
+      </div>
+
+      <div class="col-sm-8 p-3 p-lg-3 shadow-sm  bg-white rounded">
+
+        <div class="card-body pb-0">
+          <h5 class="card-title font-weight-bold"><b>รายละเอียดคอร์สอบรม</b></h5>
+          <p class="card-text">
+            <p-editor [readonly]=true [(ngModel)]="data">
+              <ng-template pTemplate="header">
+              </ng-template>
+            </p-editor>
+          </p>
+
+          <hr>
+        </div>
+        <div class="card-body pt-0 pb-0">
+          <h5 class="card-title font-weight-bold"><b>วิทยากร</b></h5>
+          <p class="card-text">{{items[id].speaker}}</p>
+        </div>
+        <hr>
+        <div class="card-body pt-0">
+          <h5 class="card-title font-weight-bold"><b>ชั่วโมงอบรม : </b> {{items[id].hour}}</h5>
+        </div>
+
+      </div>
+
+      <div class="content col-sm-4 p-3 p-lg-4  rounded">
+        <div class="card-header text-center"><b>{{items[id].course}}</b></div>
+        <div class="card-body bg-white shadow-sm ">
+          <!-- <h5 class="card-title"></h5>
+            <p class="card-text"><i class="material-icons">place</i>สถานที่อบรม : {{items[id].place}}</p>
+            <p class="card-text">วันที่อบรม : {{items[id].date | date:'dd/MM/y'}} เวลา : {{items[id].time}}</p>
+            <p class="card-text  text-muted">เหลืออีก 1 วันก่อนการอบรม</p> -->
+
+          <table class="table  table-borderless table-desc text-muted ">
+            <tbody>
+              <tr>
+                <td class="pr-1 pb-0 text-center" style="width: 24px;"><i class="material-icons text-danger"
+                    style="font-size: 24px">place</i></td>
+                <td class="pl-0" style="font-size: 17px">สถานที่ : {{items[id].place}}</td>
+              </tr>
+              <tr>
+                <td class="pr-1 pb-0 text-center" style="width: 24px;"><i class="material-icons text-danger"
+                    style="font-size: 24px">event</i></td>
+                <td class="pl-0" style="font-size: 17px">วันที่ : {{items[id].date | date:"dd/MM/y"}}</td>
+              </tr>
+              <tr>
+                <td class="pr-1 pb-0 text-center" style="width: 24px;"><i class="material-icons text-danger"
+                    style="font-size: 24px">schedule</i></td>
+                <td class="pl-0" style="font-size: 17px">เวลา : {{items[id].time}} น.</td>
+              </tr>
+              <tr>
+                <td class="pr-1 pb-0 text-center" style="width: 24px;"><i class="material-icons text-danger"
+                    style="font-size: 24px">menu_book</i></td>
+                <td class="pl-0" style="font-size: 17px">ประเภท : {{items[id].category}} </td>
+              </tr>
+              <tr>
+                <td class="pr-1 pb-0 text-center" style="width: 24px;"><i class="material-icons text-danger"
+                    style="font-size: 24px">person</i></td>
+                <td class="pl-0" style="font-size: 17px">จำนวน : {{items[id].registed}}/{{items[id].limited}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+
+        </div>
+        <div class="card-footer text-center">
+          <a href="#" class="btn btn-danger" routerLink="/login">เข้าสู่ระบบ</a>
+        </div>
+      </div>
+
+    </div>
+
+
+  
+    <!-- <ng-template #loggedIn> -->
+      <!-- login -->
+      <div class="row" *ngIf=loggedIn>
+        <div class="card col-md-12 bg-danger mb-3">
+          <!-- <div class="card-header card-header-danger"> -->
+          <h3 class="card-title ">{{items[id].course}}</h3>
+          <h4 class="card-category">&nbsp;หลักสูตรอบรม</h4>
+          <!-- </div> -->
+        </div>
+
+        <div class="col-sm-8 p-3 p-lg-3 shadow-sm  bg-white rounded">
+
+          <div class="card-body pb-0">
+            <h5 class="card-title font-weight-bold"><b>รายละเอียดคอร์สอบรม</b></h5>
+            <p class="card-text">
+              <p-editor [readonly]=true [(ngModel)]="data">
+                <ng-template pTemplate="header">
+                </ng-template>
+              </p-editor>
+            </p>
+
+            <hr>
+          </div>
+          <div class="card-body pt-0 pb-0">
+            <h5 class="card-title font-weight-bold"><b>วิทยากร</b></h5>
+            <p class="card-text">{{items[id].speaker}}</p>
+          </div>
+          <hr>
+          <div class="card-body pt-0">
+            <h5 class="card-title font-weight-bold"><b>ชั่วโมงอบรม : </b> {{items[id].hour}}</h5>
+          </div>
+
+        </div>
+
+        <div class="content col-sm-4 p-3 p-lg-4  rounded">
+          <div class="card-header text-center"><b>{{items[id].course}}</b></div>
+          <div class="card-body bg-white shadow-sm ">
+            <!-- <h5 class="card-title"></h5>
+              <p class="card-text"><i class="material-icons">place</i>สถานที่อบรม : {{items[id].place}}</p>
+              <p class="card-text">วันที่อบรม : {{items[id].date | date:'dd/MM/y'}} เวลา : {{items[id].time}}</p>
+              <p class="card-text  text-muted">เหลืออีก 1 วันก่อนการอบรม</p> -->
+
+            <table class="table  table-borderless table-desc text-muted ">
+              <tbody>
+                <tr>
+                  <td class="pr-1 pb-0 text-center" style="width: 24px;"><i class="material-icons text-danger"
+                      style="font-size: 24px">place</i></td>
+                  <td class="pl-0" style="font-size: 17px">สถานที่ : {{items[id].place}}</td>
+                </tr>
+                <tr>
+                  <td class="pr-1 pb-0 text-center" style="width: 24px;"><i class="material-icons text-danger"
+                      style="font-size: 24px">event</i></td>
+                  <td class="pl-0" style="font-size: 17px">วันที่ : {{items[id].date | date:"dd/MM/y"}}</td>
+                </tr>
+                <tr>
+                  <td class="pr-1 pb-0 text-center" style="width: 24px;"><i class="material-icons text-danger"
+                      style="font-size: 24px">schedule</i></td>
+                  <td class="pl-0" style="font-size: 17px">เวลา : {{items[id].time}} น.</td>
+                </tr>
+                <tr>
+                  <td class="pr-1 pb-0 text-center" style="width: 24px;"><i class="material-icons text-danger"
+                      style="font-size: 24px">menu_book</i></td>
+                  <td class="pl-0" style="font-size: 17px">ประเภท : {{items[id].category}} </td>
+                </tr>
+                <tr>
+                  <td class="pr-1 pb-0 text-center" style="width: 24px;"><i class="material-icons text-danger"
+                      style="font-size: 24px">person</i></td>
+                  <td class="pl-0" style="font-size: 17px">จำนวน : {{items[id].registed}}/{{items[id].limited}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+
+          </div>
+          <div class="card-footer text-center" [hidden]="expire">
+            <a class="btn btn-danger" [hidden]="check || full" (click)="register()"
+              *ngIf="!checkduplicate;else elseBlock" routerLink="/user-profile">ลงทะเบียน</a>
+            <ng-template [hidden]="check || full" #elseBlock>
+              <p class="text-start text-danger">ลงทะเบียนแล้ว</p>
+            </ng-template>
+            <!-- <a class="btn btn-danger" [hidden]="check"  (click)="register()" *ngIf="checkduplicate" routerLink="/user-profile">ลงทะเบียน</a>
+              <ng-template [hidden]="check"  *ngIf="checkCourse"><p class="text-start text-danger" >ลงทะเบียนแล้ว</p></ng-template> -->
+          </div>
+        </div>
+
+      </div>
+    <!-- </ng-template> -->
+  </div>
+</div>

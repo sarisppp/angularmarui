@@ -1,0 +1,149 @@
+<div class="main-content">
+    <div class="container-fluid">
+
+        <div class="col-md">
+            <div class="card card-profile">
+                <div class="card-avatar" name="myfile[]" customUpload="true">
+                    <a href="javascript:void(0)">
+                        <form><img class="img" src="http://localhost:8000/storage/image/{{profile.image}}"
+                                (click)="myUploader()"></form>
+                        <!-- <img class="img" src="./assets/img/faces/marc.jpg" /> -->
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-category text-gray">รหัส {{profile.employeeid}}</h6>
+                    <h4 class="card-title">คุณ {{profile.firstname}} &nbsp; {{profile.lastname}}</h4>
+                    <h6 class="card-category text-gray">ตำแหน่ง {{profile.position}} &nbsp;แผนก {{profile.department}}</h6>
+                    <a class="btn btn-danger btn-round" (click)="openNew()">เปลี่ยนรหัสผ่าน</a> &nbsp;
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title">ข้อมูลการอบรม</h4>
+                        <p class="card-category">User Profile</p>
+                    </div>
+                    <div class="card-body">
+
+
+                        <p-table [value]="products" [paginator]="true" [rows]="5" [showCurrentPageReport]="true "
+                            responsiveLayout="stack"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                            [rowsPerPageOptions]="[5,10,20]">
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>คอร์สอบรม</th>
+                                    <th>สถานที่</th>
+                                    <th>ผู้อบรม</th>
+                                    <th>ชั่วโมง</th>
+                                    <th>วันที่</th>
+                                    <th>เวลา</th>
+                                    <th>ประเภท</th>
+                                    <th>สถานะ</th>
+                                    <th></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product>
+
+                                <tr>
+                                    <td>{{product.course}}</td>
+                                    <td>{{product.place}}</td>
+                                    <td>{{product.speaker}}</td>
+                                    <td>{{product.hour}}</td>
+                                    <td>{{product.date| date:'dd/MM/y' }}</td>
+                                    <!-- <td>{{check(product.date)}}</td> -->
+                                    <td>{{product.time}} น.</td>
+                                    <td>{{product.category}}</td>
+                                    <td *ngIf='product.status === "ลงทะเบียน"' [ngStyle]="{color:'var(--yellow-500)'}">
+                                        {{product.status}}</td>
+                                    <td *ngIf='product.status === "อบรมแล้ว"' [ngStyle]="{color:'var(--green-500)'}">
+                                        {{product.status}}</td>
+                                    <td *ngIf='product.status === "ขาดอบรม"' [ngStyle]="{color:'var(--pink-500)'}">
+                                        {{product.status}}</td>
+                                    <td>
+                                        <button *ngIf="!checkDate(product.date)" pButton pRipple icon="pi pi-trash"
+                                            class="p-button-rounded p-button-warning" pTooltip="ยกเลิกอบรม"
+                                            (click)="deleteCourse(product)"></button> &nbsp;
+                                    </td>
+
+                                </tr>
+                            </ng-template>
+
+                        </p-table>
+                        <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <p-dialog [(visible)]="productDialog" [style]="{width:'450px',height:'600px'}" header="Reset Password"
+        [modal]="true" styleClass="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="alert" [hidden]="!error" [ngStyle]="{'color':'red'}">{{error}}</div>
+            <div class="alert" [hidden]="!data" [ngStyle]="{'color':'red'}">{{data}}</div>
+            <div class="p-field">
+
+                <label for="name">รหัสผ่านเก่า</label>
+                <input type="password" pInputText id="pw" [(ngModel)]="pw.password" [pKeyFilter]="blockSpace" required
+                    autofocus />
+                <small class="p-invalid" *ngIf="submitted && !pw.password" style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+
+            </div>
+
+            <div class="p-field">
+                <label for="name">รหัสผ่านใหม่</label>
+                <p-password [(ngModel)]="pw.newpassword" [pKeyFilter]="blockSpace" required autofocus>
+                    <ng-template pTemplate="header">
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <p-divider></p-divider>
+                        <p class="p-mt-2">คำแนะนำ</p>
+                        <ul class="p-pl-2 p-ml-2 p-mt-0" style="line-height: 1.5">
+                            <li>ควรมีตัวอักษรพิมพ์เล็กอย่างน้อย 1 ตัว</li>
+                            <li>ควรมีตัวอักษรพิมพ์ใหญ่อย่างน้อย 1 ตัว</li>
+                            <li>ควรมีตัวเลขอย่างน้อย 1 ตัว</li>
+                            <li>ควรมีตัวอักษรพิเศษ 1 ตัว</li>
+                            <li>ควรมีมากว่า 8 ตัวอักษร</li>
+                        </ul>
+                    </ng-template>
+                </p-password>
+                <small class="p-invalid" *ngIf="submitted && !pw.newpassword"
+                    style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+            </div>
+
+            <div class="p-field">
+
+                <label for="name">ยืนยัน รหัสผ่านใหม่</label>
+                <input type="password" pInputText id="confirmpw" [(ngModel)]="pw.conpassword" [pKeyFilter]="blockSpace"
+                    required autofocus />
+                <small class="p-invalid" *ngIf="submitted && pw.newpassword!=pw.conpassword"
+                    style="color:#ff4343">รหัสผ่านใหม่ ต้องเหมือนกันทั้ง 2 ช่อง</small>
+                <small class="p-invalid" *ngIf="submitted && !pw.conpassword"
+                    style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+            </div>
+
+
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="save(pw)"></button>
+        </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="upload" [style]="{width:'800px',height:'450px'}" header="เปลี่ยนรูปโปรไฟล์" [modal]="true"
+        styleClass="p-fluid">
+
+        <p-fileUpload name="myfile[]" (uploadHandler)="onUpload($event)" customUpload="true"></p-fileUpload>
+
+    </p-dialog>
+
+    <p-toast baseZIndex="100"></p-toast>

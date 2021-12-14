@@ -1,0 +1,330 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title ">หลักสูตรอบรม</h4>
+                        <p class="card-category">&nbsp;Training Course</p>
+                    </div>
+                    <div class="card-body">
+
+                        <p-toast baseZIndex="100"></p-toast>
+
+                        <div class="card">
+                            <!-- <p-toolbar styleClass="p-mb-4">
+                                <ng-template pTemplate="left">
+                                    <button pButton pRipple label="New" icon="pi pi-plus"
+                                        class="p-button-success p-mr-2" (click)="openNew()"></button> &nbsp;
+                                    <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                        (click)="deleteSelectedProducts()"
+                                        [disabled]="!selectedProducts || !selectedProducts.length"></button>
+                                </ng-template>
+                                <ng-template pTemplate="right">
+                                    <button type="button" pButton pRipple icon="pi pi-file-excel"
+                                        (click)="exportExcel()" class="p-button-success p-mr-2" pTooltip="XLS"
+                                        tooltipPosition="bottom"></button>&nbsp;
+                                </ng-template>
+                            </p-toolbar> -->
+
+                            <p-table #dt [value]="products" [rows]="7" [paginator]="true"
+                                [globalFilterFields]="['course','speaker','place','hour','date','category']"
+                                [(selection)]="selectedProducts" [rowHover]="true" dataKey="_id"
+                                currentPageReportTemplate="Showing {last} to {first} of {totalRecords} entries"
+                                [showCurrentPageReport]="true">
+                                <ng-template pTemplate="caption">
+                                    <div class="d-flex align-items-center justify-content-between" >
+                                        <div>
+                                            <button pButton pRipple label="New" icon="pi pi-plus"
+                                        class="p-button-success p-mr-2" (click)="openNew()"></button> &nbsp;
+                                    <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                        (click)="deleteSelectedProducts()"
+                                        [disabled]="!selectedProducts || !selectedProducts.length"></button>
+                                        
+                                        </div>
+                                        <div>
+                                            <div class="p-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                                </div> &nbsp;
+                                    
+                                                <button type="button" pButton pRipple icon="pi pi-file-excel"
+                                                (click)="exportExcel()" class="p-button-success p-mr-2" pTooltip="XLS"
+                                                tooltipPosition="bottom"></button>&nbsp;
+                                          
+                                               
+                                        </div>
+                                       
+                                    </div>
+            
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 3rem">
+                                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                        </th>
+                                        <th pSortableColumn="course">คอร์ส <p-sortIcon field="course"></p-sortIcon>
+                                        </th>
+                                        <!-- <th pSortableColumn="description">รายละเอียด <p-sortIcon field="description">
+                                            </p-sortIcon>
+                                        </th> -->
+                                        <th pSortableColumn="speaker">ผู้อบรม <p-sortIcon field="speaker"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="place">สถานที่ <p-sortIcon field="place"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="hour">ช.ม. <p-sortIcon field="hour"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="date">วันที่อบรม <p-sortIcon field="date"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="category">ประเภท<p-sortIcon field="category"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="num">จำนวน <p-sortIcon field="num"></p-sortIcon>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-product>
+                                    <tr>
+                                        <td>
+                                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                                        </td>
+                                        <td>{{product.course | slice:0:50 }}</td>
+                                        <!-- <td>{{product.description | slice:0:40}}</td> -->
+                                        <td>{{product.speaker}}</td>
+                                        <td>{{product.place}}</td>
+                                        <td>{{product.hour}}</td>
+                                        <td>{{product.date | date:'dd/MM/y'}}</td>
+                                        <td>{{product.category}}</td>
+                                        <td>{{product.registed}}/{{product.limited}}</td>
+
+                                        <td>
+
+                                            <button pButton pRipple icon="pi pi-user-edit"
+                                                class="p-button-rounded p-button-warning p-mr-2" pTooltip="ผู้ลงทะเบียน"
+                                                (click)="editCourseUser(product)"></button> &nbsp;
+                                            <button pButton pRipple icon="pi pi-pencil"
+                                                class="p-button-rounded p-button-help p-mr-2" pTooltip="แก้ไข"
+                                                (click)="editProduct(product)"></button> &nbsp;
+                                            <button pButton pRipple icon="pi pi-trash"
+                                                class="p-button-rounded p-button-secondary" pTooltip="ลบ"
+                                                (click)="deleteProduct(product)"></button>
+
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="summary">
+                                    <div class="p-d-flex p-ai-center p-jc-between">
+                                        In total there are {{products ? products.length : 0 }} products.
+                                    </div>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <p-dialog [(visible)]="productDialog" [style]="{width:'800px'}" header="Course Details"
+                            [modal]="true" styleClass="p-fluid">
+                            <ng-template pTemplate="content">
+                                <div class="p-field">
+
+                                    <label for="name">คอร์ส</label>
+                                    <input type="text" pInputText id="course" [(ngModel)]="product.course" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !product.course"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+                                <div class="p-field">
+                                    
+                                    <label for="description">รายละเอียด</label>
+                                    <!-- <textarea id="description" pInputTextarea [(ngModel)]="product.description" required
+                                        rows="3" cols="20"></textarea> -->
+                
+                                        <p-editor [(ngModel)]="product.description" [style]="{'height':'320px'}"></p-editor>
+                    
+                                </div>
+                               
+
+                                <div class="p-field">
+                                    <label for="name">ผู้อบรม</label>
+                                    <input type="text" pInputText id="speaker" [(ngModel)]="product.speaker" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !product.speaker"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="name">สถานที่</label>
+                                    <input type="text" pInputText id="place" [(ngModel)]="product.place" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !product.place"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <label for="price">ช.ม.</label>
+                                    <p-inputNumber id="hour" [(ngModel)]="product.hour"></p-inputNumber>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="category">ประเภทอบรม</label>
+                                    <p-dropdown [options]="category" [(ngModel)]="product.category" required autofocus>
+                                    </p-dropdown>
+                                    <small class="p-invalid" *ngIf="submitted && !product.category"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+                                
+                                <div class="p-field">
+                                    <label for="name">วันที่อบรม</label>
+                                    <input type="date" min="{{currentDate|date:'dd-mm-yy'}}" pInputText id="date"
+                                        [(ngModel)]="product.date" required autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !product.date"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+                                <div class="p-field">
+                                    <label for="name">เวลา</label>
+                                    <p-inputMask [(ngModel)]="product.time" mask="99:99-99:99" placeholder="00:00-00:00"  required autofocus></p-inputMask>
+                                    <!-- <input type="text" pInputText id="time" [(ngModel)]="product.time" placeholder="00:00-00:00 น." required
+                                        autofocus /> -->
+                                    <small class="p-invalid" *ngIf="submitted && !product.time"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+                                <div class="p-field p-col">
+                                    <label for="price">จำนวน</label>
+                                    <p-inputNumber [(ngModel)]="product.limited" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal"
+                                decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"  [min]="0"
+                                 incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
+                                </div>
+                              
+                               
+                            </ng-template>
+
+                            <ng-template pTemplate="footer">
+                                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                                    (click)="hideDialog()"></button>
+                                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                                    (click)="saveProduct()"></button>
+                            </ng-template>
+                        </p-dialog>
+
+                       
+
+                        <p-dialog [(visible)]="registerCourse" [style]="{width:'1300px'}" header="รายชื่อเข้าอบรมคอร์ส {{header.course}}"
+                            [modal]="true" styleClass="p-fluid" baseZIndex=5>
+                            <p-toolbar styleClass="p-mb-4">
+                                <ng-template pTemplate="left">
+                                    <button pButton pRipple label="New" icon="pi pi-plus"
+                                        class="p-button-success p-mr-2" (click)="RegisterUser()"></button> &nbsp;
+                                    <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                        (click)="deleteSelectRegister()"
+                                        [disabled]="!selectedUsers || !selectedUsers.length"></button>
+                                        
+                                </ng-template>
+                                <ng-template pTemplate="right">
+                                    <button type="button" pButton pRipple icon="pi pi-file-excel"
+                                        (click)="exportExcelRegister()" class="p-button-success p-mr-2" pTooltip="XLS"
+                                        tooltipPosition="bottom"></button>&nbsp;
+                                </ng-template>
+                             
+                                
+                            </p-toolbar>
+
+
+                            <p-table #dt [value]="users" [rows]="5" [paginator]="true"
+                                [globalFilterFields]="['name','country.name','representative.name','status']"
+                                [(selection)]="selectedUsers" [rowHover]="true" dataKey="_id"
+                                currentPageReportTemplate="Showing {last} to {first} of {totalRecords} entries"
+                                [showCurrentPageReport]="true">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 3rem">
+                                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                        </th>
+                                        <th pSortableColumn="course">รหัสพนักงาน <p-sortIcon field="course">
+                                            </p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="description">ชื่อ <p-sortIcon field="description">
+                                            </p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="speaker">นามสกุล <p-sortIcon field="speaker"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="place">แผนก <p-sortIcon field="place"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="email">UserID <p-sortIcon field="email"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="status">สถานะ <p-sortIcon field="status"></p-sortIcon>
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-user>
+                                    <tr>
+                                        <td>
+                                            <p-tableCheckbox [value]="user"></p-tableCheckbox>
+                                        </td>
+                             
+                                        <td>{{user.employeeid}}</td>
+                                        <td>{{user.firstname}}</td>
+                                        <td>{{user.lastname}}</td>
+                                        <td>{{user.department}}</td>
+                                        <td>{{user.email}}</td>
+                                        <td pEditableColumn>
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <p-dropdown [options]="statuses" [(ngModel)]="user.status">
+                                                    </p-dropdown>
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{user.status}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+
+                                <ng-template pTemplate="summary">
+                                    <div class="p-d-flex p-ai-center p-jc-between">
+                                        In total there are {{users ? users.length : 0 }} people.
+                                    </div>
+                                </ng-template>
+                            </p-table>
+                            <ng-template pTemplate="footer">
+                                <div class="p-d-flex p-ai-right p-jc-between">
+                                    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                                        (click)="hideRegisterCourse()"></button>
+                                    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                                        (click)="saveRegisterCourse()"></button>
+                                </div>
+                            </ng-template>
+
+                        </p-dialog>
+
+
+                        <p-dialog [(visible)]="RegisterDialog" [style]="{width:'450px'}" header="ลงทะเบียนอบรม"
+                            [modal]="true" styleClass="p-fluid">
+                            <ng-template pTemplate="content">
+                                <div class="p-field">
+                                    <label for="name">รหัสพนักงาน</label>
+                                    <div class="alert" [hidden]="!error" [ngStyle]="{'color':'red'}">{{error}}</div>
+                                    <input type="text" pInputText id="course" pKeyFilter="pnum"
+                                        [(ngModel)]="registerUser._id" required autofocus />
+                                    <small class="p-invalid" *ngIf="submitRegister && !registerUser._id"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+                            </ng-template>
+
+                            <ng-template pTemplate="footer">
+                                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                                    (click)="hideRegister()"></button>
+                                <button pButton pRipple label="Save" autofocus icon="pi pi-check" class="p-button-text"
+                                    (click)="saveRegister(registerUser._id)"></button>
+                            </ng-template>
+                        </p-dialog>
+                       
+
+                        <p-confirmDialog [baseZIndex]="10000" [style]="{width: '450px',hegiht:'50px'}"></p-confirmDialog>
+
+                      
+                       
+
+                    </div>
+                </div> 
+
+            </div>

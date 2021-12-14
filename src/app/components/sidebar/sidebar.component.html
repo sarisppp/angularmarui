@@ -1,0 +1,67 @@
+<div class="logo">
+    <a href="" class="simple-text">
+        <div> 
+            <img style="width: 100%; margin-top: 33px;" src="/assets/img/logo.png"/>
+        </div>
+        ฝึกอบรม พนักงานมารวย
+    </a>
+</div>
+<div class="sidebar-wrapper">
+  <div *ngIf="isMobileMenu()">
+    <form class="navbar-form">
+      <span class="bmd-form-group">
+        <div class="input-group no-border">
+          <input type="text" value="" class="form-control" placeholder="Search...">
+          <button mat-raised-button type="submit" class="btn btn-white btn-round btn-just-icon">
+            <i class="material-icons">search</i>
+            <div class="ripple-container"></div>
+          </button>
+        </div>
+      </span>
+    </form>
+   
+  </div>
+    <ul class="nav" *ngIf=!loggedIn>
+        <li routerLinkActive="active" *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item" >
+            <a class="nav-link" [routerLink]="[menuItem.path]">
+                <i class="material-icons">{{menuItem.icon}}</i>
+                <p>{{menuItem.title}}</p>
+            </a>
+        </li>
+    </ul> 
+
+
+    <ul class="nav" *ngIf="loggedIn && role=='admin'">
+      <li routerLinkActive="active" *ngFor="let menuItemLogined of menuItemLogined;" class="{{menuItemLogined.class}} nav-item" >
+          <a class="nav-link" [routerLink]="[menuItemLogined.path]">
+              <i class="material-icons">{{menuItemLogined.icon}}</i>
+              <p>{{menuItemLogined.title}}</p>
+          </a>
+      </li>
+      
+
+      <li routerLinkActive="active" *ngFor="let menuLogout of menuLogout;" class="{{menuLogout.class}} nav-item" >
+            <a class="nav-link" [routerLink]="[menuLogout.path]" (click)="logout($event)">
+              <i class="material-icons">{{menuLogout.icon}}</i>
+              <p>{{menuLogout.title}}</p>
+             </a>
+      </li>
+  </ul>
+
+  <ul class="nav" *ngIf="loggedIn && role!='admin'">
+    <li routerLinkActive="active" *ngFor="let menuItemUser of menuItemUser;" class="{{menuItemUser.class}} nav-item" >
+        <a class="nav-link" [routerLink]="[menuItemUser.path]">
+            <i class="material-icons">{{menuItemUser.icon}}</i>
+            <p>{{menuItemUser.title}}</p>
+        </a>
+    </li>
+    
+
+    <li routerLinkActive="active" *ngFor="let menuLogout of menuLogout;" class="{{menuLogout.class}} nav-item" >
+          <a class="nav-link" [routerLink]="[menuLogout.path]" (click)="logout($event)">
+            <i class="material-icons">{{menuLogout.icon}}</i>
+            <p>{{menuLogout.title}}</p>
+           </a>
+    </li>
+</ul>
+</div>

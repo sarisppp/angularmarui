@@ -1,0 +1,471 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title ">ลงทะเบียนพนักงาน</h4>
+                        <p class="card-category">&nbsp;Register</p>
+                    </div>
+                    <div class="card-body">
+
+
+                        <div class="card">
+
+
+                            <p-table #dt [value]="users" [rows]="5" [paginator]="true"
+                                [globalFilterFields]="['firstname','lastname','email','role','position','title','employeeid','department']"
+                                [(selection)]="selectedUsers" [rowHover]="true" dataKey="_id"
+                                currentPageReportTemplate="Showing {last} to {first} of {totalRecords} entries"
+                                [showCurrentPageReport]="true">
+                                <ng-template pTemplate="caption">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <button pButton pRipple label="New" icon="pi pi-plus"
+                                                class="p-button-success p-mr-2" (click)="openNew()"></button> &nbsp;
+                                            <button pButton pRipple label="Delete" icon="pi pi-trash"
+                                                class="p-button-danger" (click)="deleteSelectedUsers()"
+                                                [disabled]="!selectedUsers || !selectedUsers.length"></button>
+
+                                        </div>
+                                        <div>
+                                            <div class="p-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <input pInputText type="text"
+                                                    (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                                    placeholder="Search..." />
+                                            </div> &nbsp;
+
+                                            <button type="button" pButton pRipple icon="pi pi-file-excel"
+                                                (click)="exportExcel()" class="p-button-success p-mr-2" pTooltip="XLS"
+                                                tooltipPosition="bottom"></button>&nbsp;
+
+
+                                        </div>
+
+                                    </div>
+
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 3rem">
+                                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                        </th>
+                                        <th pSortableColumn="employeeid">รหัสพนักงาน <p-sortIcon field="employeeid">
+                                            </p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="title">คำนำหน้า <p-sortIcon field="title"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="firstname">ชื่อ <p-sortIcon field="firstname"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="lastname">นามสกุล <p-sortIcon field="lastname">
+                                            </p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="position">ตำแหน่ง<p-sortIcon field="position"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="department">แผนก <p-sortIcon field="department">
+                                            </p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="email">UserID <p-sortIcon field="email"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="role">สิทธิ์<p-sortIcon field="role"></p-sortIcon>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-user>
+                                    <tr>
+                                        <td>
+                                            <p-tableCheckbox [value]="user"></p-tableCheckbox>
+                                        </td>
+                                        <td>{{user.employeeid}}</td>
+                                        <td>{{user.title}}</td>
+                                        <td>{{user.firstname}}</td>
+                                        <td>{{user.lastname}}</td>
+                                        <td>{{user.position}}</td>
+                                        <td>{{user.department}}</td>
+                                        <td>{{user.email}}</td>
+                                        <td>{{user.role}}</td>
+
+                                        <td>
+                                            <button pButton pRipple icon="pi pi-book"
+                                                class="p-button-rounded p-button-warning p-mr-2"
+                                                pTooltip="ประวัติการอบรม" (click)="CourseUser(user)"></button> &nbsp;
+                                            <button pButton pRipple icon="pi pi-pencil"
+                                                class="p-button-rounded p-button-help p-mr-2" pTooltip="แก้ไข"
+                                                (click)="editUser(user)"></button> &nbsp;
+                                            <button pButton pRipple icon="pi pi-trash"
+                                                class="p-button-rounded p-button-secondary" pTooltip="ลบ"
+                                                (click)="deleteUser(user)"></button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="summary">
+                                    <div class="p-d-flex p-ai-center p-jc-between">
+                                        In total there are {{users ? users.length : 0 }} users.
+                                    </div>
+                                </ng-template>
+                            </p-table>
+                        </div>
+
+
+                        <p-dialog [(visible)]="productDialog" [style]="{width:'450px'}" header="ข้อมูลพนักงาน"
+                            [modal]="true" styleClass="p-fluid">
+                            <ng-template pTemplate="content">
+                                <div class="p-field">
+
+                                    <label for="employeeid">รหัสพนักงาน</label>
+                                    <input type="text" pInputText id="employeeid" [(ngModel)]="user.employeeid" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.employeeid"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+                                <div class="p-field">
+                                    <div class="p-field">
+                                        <label for="department">คำนำหน้า</label>
+                                        <p-dropdown [options]="title" [(ngModel)]="user.title" editable="true">
+                                        </p-dropdown>
+                                        <small class="p-invalid" *ngIf="submitted && !user.title"
+                                            style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                    </div>
+
+                                    <label for="name">ชื่อ</label>
+                                    <input type="text" pInputText id="firstname" [(ngModel)]="user.firstname" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.firstname"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+                                <div class="p-field">
+                                    <label for="lastname">นามสกุล</label>
+                                    <input type="text" pInputText id="lastname" [(ngModel)]="user.lastname" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.lastname"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+                                <div class="p-field">
+                                    <label for="department">ตำแหน่ง</label>
+                                    <input type="text" pInputText id="position" [(ngModel)]="user.position" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.position"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="department">แผนก</label>
+                                    <!-- <input type="text" pInputText id="department"  [(ngModel)]="user.department" required autofocus /> -->
+                                    <p-dropdown [options]="statuses" [(ngModel)]="user.department" editable="true">
+                                    </p-dropdown>
+                                    <small class="p-invalid" *ngIf="submitted && !user.department"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                    <!-- <ng-template pTemplate="input">
+            </ng-template> -->
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="department">สิทธิ์</label>
+                                    <p-dropdown [options]="role" [(ngModel)]="user.role" placeholder="เลือกสิทธิ์">
+                                    </p-dropdown>
+                                    <small class="p-invalid" *ngIf="submitted && !user.role"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="email">UserId</label>
+                                    <input type="text" pInputText id="email" [(ngModel)]="user.email" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.email"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="password">พาสเวิด</label>
+                                    <input type="password" pInputText id="password" [(ngModel)]="user.password" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.password"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+                            </ng-template>
+
+                            <ng-template pTemplate="footer">
+                                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                                    (click)="hideDialog()"></button>
+                                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                                    (click)="saveUser()"></button>
+                            </ng-template>
+                        </p-dialog>
+
+
+                        <p-dialog [(visible)]="userDialog" [style]="{width:'450px'}" header="ข้อมูลพนักงาน"
+                            [modal]="true" styleClass="p-fluid">
+                            <ng-template pTemplate="content">
+                                <div class="p-field">
+
+                                    <label for="employeeid">รหัสพนักงาน</label>
+                                    <input type="text" pInputText id="employeeid" [(ngModel)]="user.employeeid" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.employeeid"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+                                <div class="p-field">
+                                    <div class="p-field">
+                                        <label for="department">คำนำหน้า</label>
+                                        <p-dropdown [options]="title" [(ngModel)]="user.title" editable="true">
+                                        </p-dropdown>
+                                        <small class="p-invalid" *ngIf="submitted && !user.title"
+                                            style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                    </div>
+
+                                    <label for="name">ชื่อ</label>
+                                    <input type="text" pInputText id="firstname" [(ngModel)]="user.firstname" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.firstname"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+                                <div class="p-field">
+                                    <label for="lastname">นามสกุล</label>
+                                    <input type="text" pInputText id="lastname" [(ngModel)]="user.lastname" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.lastname"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+                                <div class="p-field">
+                                    <label for="department">ตำแหน่ง</label>
+                                    <input type="text" pInputText id="position" [(ngModel)]="user.position" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.position"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="department">แผนก</label>
+                                    <p-dropdown [options]="statuses" [(ngModel)]="user.department" editable="true"
+                                        required autofocus> </p-dropdown>
+                                    <small class="p-invalid" *ngIf="submitted && !user.department"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="department">สิทธิ์</label>
+                                    <p-dropdown [options]="role" [(ngModel)]="user.role" required autofocus>
+                                    </p-dropdown>
+                                    <small class="p-invalid" *ngIf="submitted && !user.role"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+
+                                <div class="p-field">
+                                    <label for="email">UserId</label>
+                                    <input type="text" pInputText id="email" [(ngModel)]="user.email" required
+                                        autofocus />
+                                    <small class="p-invalid" *ngIf="submitted && !user.email"
+                                        style="color:#ff4343">กรุณาใส่ข้อมูล</small>
+                                </div>
+
+
+                            </ng-template>
+
+                            <ng-template pTemplate="footer">
+                                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                                    (click)="hideDialog()"></button>
+                                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                                    (click)="saveUser()"></button>
+                            </ng-template>
+                        </p-dialog>
+
+
+
+                        <p-dialog [(visible)]="courseUser" [style]="{width:'1300px'}"
+                            header="ประวัติการอบรม คุณ{{header.user}}" [modal]="true" styleClass="p-fluid" baseZIndex=5>
+
+                             <p-table #da [value]="courses" [rows]="5" [paginator]="true"
+                                [globalFilterFields]="['course','speaker','place','hour','date','category','status']"
+                                [rowHover]="true" dataKey="_id"
+                                currentPageReportTemplate="Showing {last} to {first} of {totalRecords} entries"
+                                [showCurrentPageReport]="true">
+
+                                <ng-template pTemplate="header">
+
+                                    <div class="mx-auto " style="width: 500px;">
+                                        <div class="card card-profile " style="margin-top: 60px;">
+                                             <div class="card-avatar" name="myfile[]" customUpload="true">
+                                            <form><img class="img"
+                                                    src="http://localhost:8000/storage/image/{{image}}">
+                                            </form>
+                                        </div>
+                                       
+                                            <div class="card-body">
+                                                <h6 class="card-category text-gray">รหัส {{employeeid}}</h6>
+                                                <h4 class="card-title">คุณ {{firstname}} {{lastname}}</h4>
+                                                <h6 class="card-category text-gray">ตำแหน่ง {{position}} แผนก {{department}}  </h6>
+                                                <!-- <h6 class="card-category text-gray">รหัส [(ngModel)]="profileUser.employeeid"</h6>
+                                                <h4 class="card-title">คุณ [(ngModel)]="profileUser.firstname" &nbsp;
+                                                    [(ngModel)]="profileUser.lastname"</h4>
+                                                <h6 class="card-category text-gray">ตำแหน่ง [(ngModel)]="profileUser.position"
+                                                    &nbsp;แผนก [(ngModel)]="profileUser.department" </h6> -->
+
+                                            </div> 
+
+                                        </div>
+                                    </div>
+
+
+
+                                     <div class="d-grid mb-1 gap-2 d-md-flex justify-content-md-end">
+                                        <div class="p-input-icon-left" style="width:230px">
+                                            <i class="pi pi-search"></i>
+                                            <input pInputText type="text"
+                                                (input)="da.filterGlobal($event.target.value, 'contains')"
+                                                placeholder="Search..." />
+                                        </div> &nbsp;
+
+                                        <button type="button " pButton pRipple icon="pi pi-file-excel"
+                                            class="p-button-success  " (click)="exportExcelCourse()" pTooltip="XLS"
+                                            tooltipPosition="bottom"></button>&nbsp;
+
+                                    </div>
+
+
+
+                                    <table class="table table-warning table-striped">
+
+                                        <tr>
+
+                                            <th pSortableColumn="course">คอร์สอบรม <p-sortIcon field="course">
+                                                </p-sortIcon>
+                                            </th>
+                                
+                                            <th pSortableColumn="speaker">ผู้อบรม <p-sortIcon field="speaker">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="place">สถานที่อบรม <p-sortIcon field="place"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="hour">ชั่วโมงอบรม <p-sortIcon field="hour"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="date">วันที่อบรม <p-sortIcon field="date"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="category">ประเภทอบรม <p-sortIcon field="category"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="status">สถานะอบรม <p-sortIcon field="status"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </table>
+                                    <hr> 
+
+                                </ng-template>
+
+
+                                
+                                <!-- <ng-template pTemplate="header">  old
+
+                                    <div class="mx-auto " style="width: 300px;">
+                                        <div class="card card-profile mt-5 " style="margin-top: 50px;">
+                                       
+                                            <div class="card-body">
+                                                <h6 class="card-category text-gray">รหัส {{profileUser.employeeid}}</h6>
+                                                <h4 class="card-title">คุณ {{profileUser.firstname}} &nbsp;
+                                                    {{profileUser.lastname}}</h4>
+                                                <h6 class="card-category text-gray">ตำแหน่ง {{profileUser.position}}
+                                                    &nbsp;แผนก {{profileUser.department}} </h6>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="d-grid mb-1 gap-2 d-md-flex justify-content-md-end">
+                                        <div class="p-input-icon-left" style="width:230px">
+                                            <i class="pi pi-search"></i>
+                                            <input pInputText type="text"
+                                                (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                                placeholder="Search..." />
+                                        </div> &nbsp;
+
+                                        <button type="button " pButton pRipple icon="pi pi-file-excel"
+                                            class="p-button-success  " (click)="exportExcelCourse()" pTooltip="XLS"
+                                            tooltipPosition="bottom"></button>&nbsp;
+
+                                    </div>
+
+
+
+                                    <table class="table table-warning table-striped">
+
+                                        <tr>
+
+                                            <th pSortableColumn="course">คอร์ส <p-sortIcon field="course">
+                                                </p-sortIcon>
+                                            </th>
+                                
+                                            <th pSortableColumn="speaker">ผู้อบรม <p-sortIcon field="speaker">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="place">สถานที่ <p-sortIcon field="place"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="hour">ช.ม. <p-sortIcon field="hour"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="date">วันที่อบรม <p-sortIcon field="date"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="time">เวลา <p-sortIcon field="time"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="status">สถานะ <p-sortIcon field="status"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </table>
+                                    <hr>
+
+                                </ng-template> -->
+
+
+                                <ng-template pTemplate="body" let-course>
+                                    <table class="table">
+                                        <tr>
+                                            <td>{{course.course}}</td>
+                                            <td>{{course.speaker}}</td>
+                                            <td>{{course.place}}</td>
+                                            <td>{{course.hour}}</td>
+                                            <td>{{course.date | date:'dd/MM/y' }}</td>
+                                            <td>{{course.category}}</td>
+                                            <td *ngIf='course.status === "ลงทะเบียน"'
+                                                [ngStyle]="{color:'var(--yellow-500)'}">{{course.status}}</td>
+                                            <td *ngIf='course.status === "อบรมแล้ว"'
+                                                [ngStyle]="{color:'var(--green-500)'}">
+                                                {{course.status}}</td>
+                                            <td *ngIf='course.status === "ขาดอบรม"'
+                                                [ngStyle]="{color:'var(--pink-500)'}">
+                                                {{course.status}}</td>
+                                        </tr>
+                                    </table>
+                                    <hr>
+                                </ng-template>
+
+
+                                <ng-template pTemplate="summary">
+
+                                    <div class="p-d-flex p-ai-center justify-content-between">
+                                        In total there are {{courses ? courses.length : 0 }} courses.
+
+                                    </div>
+
+
+                                </ng-template>
+
+                            </p-table> 
+                        </p-dialog>
+                    </div>
+
+                    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+
+                </div>
+                
+            </div>
+        
+        </div>
+        <p-toast baseZIndex="100"></p-toast>

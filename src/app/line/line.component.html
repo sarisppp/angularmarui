@@ -1,0 +1,35 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title ">Line Token</h4>
+                        <P class="card-category" >แก้ไขสำหรับ Line แจ้งเตือน</P>
+                    </div>
+                    <div class="card-body">
+                        
+                        
+  
+  <div class="card">
+      <p-toolbar styleClass="p-mb-4">
+          <ng-template pTemplate="left">
+            <label for="employeeid">Token </label> &nbsp; &nbsp;
+            <input type="text" [size]="50" pInputText id="employeeid" [(ngModel)]="linetoken.token"  required autofocus /> &nbsp; &nbsp;
+            <button pButton type="button" icon="pi pi-save" label="บันทึก" (click)="changeToken(linetoken)" iconPos="left" class="p-button-success"></button>
+
+          </ng-template> 
+      </p-toolbar>
+
+                                       
+  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+                
+<p-toast baseZIndex="100"></p-toast>
+                    </div>
+                    <div>
+                        <img src="../../assets/img/line-icon.png" alt="Line Logo" width="40" height="40">
+                        <a href="https://notify-bot.line.me/my/" target="_blank">กดที่นี้เพื่อเข้าสู่ระบบ Line</a>
+                    </div>
+                </div>
+            </div>
+     
